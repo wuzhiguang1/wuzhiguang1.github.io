@@ -4642,6 +4642,9 @@ _:future,
   -o-transition: box-shadow 0.3s ease-in-out;
   -ms-transition: box-shadow 0.3s ease-in-out;
   transition: box-shadow 0.3s ease-in-out;
+  overflow: hidden;
+  border-radius: 12px !important;
+  background-color: #eff1f3;
 }
 #post .post-copyright:before {
   position: absolute;
@@ -4650,6 +4653,15 @@ _:future,
   color: #49b1f5;
   content: '\f1f9';
   font-size: 1rem;
+  position: absolute;
+  right: -26px;
+  top: -120px;
+  content: '\f25e';
+  font-size: 200px;
+  font-family: 'Font Awesome 5 Brands';
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
 }
 #post .post-copyright:hover {
   -webkit-box-shadow: 0 0 8px 0 rgba(232,237,250,0.6), 0 2px 4px 0 rgba(232,237,250,0.5);
@@ -4665,6 +4677,7 @@ _:future,
 #post .post-copyright .post-copyright-info a {
   text-decoration: underline;
   word-break: break-word;
+  text-decoration: none;
 }
 #post .post-copyright .post-copyright-info a:hover {
   text-decoration: none;
