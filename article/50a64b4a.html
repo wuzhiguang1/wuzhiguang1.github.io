@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JavaScript 性能优化之作用域安全的构造函数 | 阿清的小站</title><meta name="keywords" content="JavaScript,性能优化"><meta name="author" content="阿清"><meta name="copyright" content="阿清"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 性能优化之作用域安全的构造函数">
+<meta property="og:url" content="http://example.com/article/50a64b4a.html">
+<meta property="og:site_name" content="阿清的小站">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/bf3c2ef4776eca04a56e14694b9626d9--557139948.jpg">
+<meta property="article:published_time" content="2020-06-03T14:28:28.000Z">
+<meta property="article:modified_time" content="2020-08-02T05:42:49.958Z">
+<meta property="article:author" content="阿清">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="性能优化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/bf3c2ef4776eca04a56e14694b9626d9--557139948.jpg"><link rel="shortcut icon" href="https://blog-static.cnblogs.com/files/aqingya/aqingya.ico"><link rel="canonical" href="http://example.com/article/50a64b4a"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?https://hm.baidu.com/hm.js?d83e29f244982577e92f18a1caa94651";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 阿清","link":"链接: ","source":"来源: 阿清的小站","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2020-08-02 13:42:49'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="css/Lete.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_2493149_tnwjw27heat.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sviptzk/StaticFile_HEXO@latest/butterfly/css/plugins.min.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@1.3/photo/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">153</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://wuzhiguang1.github.io/"><i class="fa-fw fas fa-paper-plane"></i><span> 旧博客</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://quickso.cn/"><i class="fa-fw fas fa-search"></i><span> 快点搜</span></a></div><div class="menus_item"><a class="site-page" href="/tool/collection.html"><i class="fa-fw fas fa-star"></i><span> 网址收藏</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/bf3c2ef4776eca04a56e14694b9626d9--557139948.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">阿清的小站</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 找文章</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://wuzhiguang1.github.io/"><i class="fa-fw fas fa-paper-plane"></i><span> 旧博客</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://quickso.cn/"><i class="fa-fw fas fa-search"></i><span> 快点搜</span></a></div><div class="menus_item"><a class="site-page" href="/tool/collection.html"><i class="fa-fw fas fa-star"></i><span> 网址收藏</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JavaScript 性能优化之作用域安全的构造函数</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-06-03T14:28:28.000Z" title="发表于 2020-06-03 22:28:28">2020-06-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-08-02T05:42:49.958Z" title="更新于 2020-08-02 13:42:49">2020-08-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaScript/">JavaScript</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JavaScript 性能优化之作用域安全的构造函数"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src= "/aqing/img/loading.gif" data-lazy-src="https://gitee.com/wu_zhiguang/blog/raw/master/img/accc4dfe993948518693431ee9ce56b6.jpg"></p>
+<span id="more"></span>
+
+<p>构造函数其实就是一个使用new操作符调用的函数。当使用new调用时，构造函数内用到的this对象会指向新创建的对象实例，如下面的例子所示:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name, age, job</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">    <span class="built_in">this</span>.job = job;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person(<span class="string">&quot;aqingya&quot;</span>, <span class="number">18</span>, <span class="string">&quot;吴志广&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>上面这个例子中，Person构造函数使用this对象给三个属性赋值: name、age和 job。当和new操作符连用时，则会创建一个新的 Person对象，同时会给它 分配这些属性。问题出在当没有使用new操作符来调用该构造函数的情况上。由于该this对象是在运行时绑定的，所以直接调用Person(),this会映射到全局对象window.上，导致错误对象属性的意外增加。例如:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = Person(<span class="string">&quot;aqingya&quot;</span>, <span class="number">18</span>, <span class="string">&quot;吴志广&quot;</span>);</span><br><span class="line">alert(<span class="built_in">window</span>.name); <span class="comment">//&quot;aqingya&quot;</span></span><br><span class="line">alert(<span class="built_in">window</span>.age); <span class="comment">//18</span></span><br><span class="line">alert(<span class="built_in">window</span>.job); <span class="comment">//吴志广</span></span><br></pre></td></tr></table></figure>
+<p>原本针对Person实例的三个属性被加到window对象上，因为构造函数是作为普通函数调用的，忽略了new操作符。这个问题是由this 对象的晚绑定造成的，在这里this被解析成了window对象。</p>
+<p><strong>解决方法</strong>：就是创建一个<strong>作用域安全的构造函数</strong>。<span style="color:red">在进行更改之前，首先确认this对象的正确类型的实例，如果不是就会创建新的实例并返回。</span></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name, age, job</span>) </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (<span class="built_in">this</span> <span class="keyword">instanceof</span> Person) &#123;</span><br><span class="line">         <span class="built_in">this</span>.name = name;</span><br><span class="line">         <span class="built_in">this</span>.age = age;</span><br><span class="line">         <span class="built_in">this</span>.job = job;</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">new</span> Person(name, age, job);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">var</span> person1 = Person(<span class="string">&quot;Nicholas&quot;</span>, <span class="number">29</span>, <span class="string">&quot;Software Engineer&quot;</span>);</span><br><span class="line"> alert(<span class="built_in">window</span>.name); <span class="comment">//&quot;&quot;</span></span><br><span class="line"> alert(person1.name); <span class="comment">//&quot;Nicholas&quot;</span></span><br><span class="line"> <span class="keyword">var</span> person2 = <span class="keyword">new</span> Person(<span class="string">&quot;Shelby&quot;</span>, <span class="number">34</span>, <span class="string">&quot;Ergonomist&quot;</span>);</span><br><span class="line"> alert(person2.name); <span class="comment">//&quot;Shelby&quot;</span></span><br></pre></td></tr></table></figure>
+<p>Person构造函数添加了一个检查并确保this对象是Person实例的 if 语句，它表示要么使用new操作符，要么在现有的Person实例环境中调用构造函数。任何一种情况下，对象初始化都能正常进行。如果this并非Person的实例，那么会再次使用new操作符调用构造函数并返回结果。</p>
+<br>
+
+<p><strong>但是这也会出现一个问题</strong>：实现这个模式后，你就锁定了可以调用构造函数的环境。如果你使用构造函数窃取模式的继承且不使用原型链，那么这个继承很可能被破坏。如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Polygon</span>(<span class="params">sides</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span> <span class="keyword">instanceof</span> Polygon) &#123;</span><br><span class="line">        <span class="built_in">this</span>.sides = sides;</span><br><span class="line">        <span class="built_in">this</span>.getArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Polygon(sides);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Rectangle</span>(<span class="params">width, height</span>) </span>&#123;</span><br><span class="line">    Polygon.call(<span class="built_in">this</span>, <span class="number">2</span>);</span><br><span class="line">    <span class="built_in">this</span>.width = width;</span><br><span class="line">    <span class="built_in">this</span>.height = height;</span><br><span class="line">    <span class="built_in">this</span>.getArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.width * <span class="built_in">this</span>.height;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> rect = <span class="keyword">new</span> Rectangle(<span class="number">5</span>, <span class="number">10</span>);</span><br><span class="line">alert(rect.sides); <span class="comment">//undefined</span></span><br></pre></td></tr></table></figure>
+<p>在这段代码中，Polygon 构造函数是作用域安全的，然而Rectangle构造函数则不是。新创建一个Rectangle实例之后，这个实例应该通过Polygon. call ()来继承Polygon的sides属性。但是，由于Polygon构造函数是作用域安全的，this 对象并非Polygon的实例，所以会创建并返回一个新的Polygon对象。Rectangle 构造函数中的this对象并没有得到增长，同时Polygon. call ()返回的值也没有用到，所以Rectangle实例中就不会有sides属性。</p>
+<p><strong>解决方法</strong>：构造函数窃取结合使用原型链的方法可以解决该问题。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Polygon</span>(<span class="params">sides</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span> <span class="keyword">instanceof</span> Polygon) &#123;</span><br><span class="line">        <span class="built_in">this</span>.sides = sides;</span><br><span class="line">        <span class="built_in">this</span>.getArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Polygon(sides);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Rectangle</span>(<span class="params">width, height</span>) </span>&#123;</span><br><span class="line">    Polygon.call(<span class="built_in">this</span>, <span class="number">2</span>);</span><br><span class="line">    <span class="built_in">this</span>.width = width;</span><br><span class="line">    <span class="built_in">this</span>.height = height;</span><br><span class="line">    <span class="built_in">this</span>.getArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.width * <span class="built_in">this</span>.height;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Rectangle.prototype = <span class="keyword">new</span> Polygon();</span><br><span class="line"><span class="comment">//让Rectangle的原型成为 Polygon的实例。Rectangle的实例同时也是Polygon的实例。</span></span><br><span class="line"><span class="comment">//所以 Polygon.call()会按照原意执行。为Rectangle添加sides属性</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> rect = <span class="keyword">new</span> Rectangle(<span class="number">5</span>, <span class="number">10</span>);</span><br><span class="line">alert(rect.sides); <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+
+
+<br>
+<br>
+愿你的坚持终有收获。
+<br>
+<br>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>JavaScript 性能优化之作用域安全的构造函数</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://example.com/article/50a64b4a.html">http://example.com/article/50a64b4a.html</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a" style="display: inline-block;width: 120px"><h>作者</h><div class="post-copyright-cc-info"><h>阿清</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>发布于</h><div class="post-copyright-cc-info"><h>2020-06-03</h></div></div><div class="post-copyright-u" style="display: inline-block;width: 120px"><h>更新于</h><div class="post-copyright-cc-info"><h>2020-08-02</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY 4.0" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaScript/">JavaScript</a><a class="post-meta__tags" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/bf3c2ef4776eca04a56e14694b9626d9--557139948.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://gitee.com/wu_zhiguang/blog/raw/master/img/1234.jpg" target="_blank"><img class="post-qr-code-img" data-lazy-src="https://gitee.com/wu_zhiguang/blog/raw/master/img/1234.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/article/36002a8e.html"><img class="prev-cover" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/IMG_0097.JPG" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JavaScript 性能优化之惰性加载函数</div></div></a></div><div class="next-post pull-right"><a href="/article/9f76d0da.html"><img class="next-cover" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/IMG_0086.JPG" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JavaScript 性能优化之安全类型检测</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/article/a871f482.html" title="前端性能优化之reflow(回流)和repaint(重绘)"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/IMG_0114.JPG" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-09</div><div class="title">前端性能优化之reflow(回流)和repaint(重绘)</div></div></a></div><div><a href="/article/36002a8e.html" title="JavaScript 性能优化之惰性加载函数"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/IMG_0097.JPG" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-03</div><div class="title">JavaScript 性能优化之惰性加载函数</div></div></a></div><div><a href="/article/9f76d0da.html" title="JavaScript 性能优化之安全类型检测"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/IMG_0086.JPG" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-03</div><div class="title">JavaScript 性能优化之安全类型检测</div></div></a></div><div><a href="/article/2ce56133.html" title="JavaScript 对call()、apply()、bind()的彻底理解（很好懂）"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/d4df7cf248b245ea20bc85a36f2de698--727859976.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-04</div><div class="title">JavaScript 对call()、apply()、bind()的彻底理解（很好懂）</div></div></a></div><div><a href="/article/b7eb7671.html" title="JavaScript 性能优化之函数绑定"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/c7f34daaf981ee55f12dc315121e7066--110790201.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-04</div><div class="title">JavaScript 性能优化之函数绑定</div></div></a></div><div><a href="/article/9006c895.html" title="JavaScript 性能优化之防篡改对象"><img class="cover" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/83oo7k.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-04</div><div class="title">JavaScript 性能优化之防篡改对象</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@1.3/photo/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">阿清</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">153</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">84</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://qm.qq.com/cgi-bin/qm/qr?k=ndRrI06JQQoYUJA16kQiR3_eAmhl1iK1&amp;jump_from=webapi"><i class="fab fa-qq"></i><span>QQ交流群</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/wuzhiguang1" target="_blank" title="Github"><i class="iconfont icon-GitHub"></i></a><a class="social-icon" href="https://gitee.com/wu_zhiguang/blog/raw/master/img/VB[0MNOQ[{TLHF{3Z]7IJKN.jpg" target="_blank" title="QQ群"><i class="iconfont icon-QQ"></i></a><a class="social-icon" href="https://blog.csdn.net/wzg0817" target="_blank" title="CSDN"><i class="iconfont icon-csdn1"></i></a><a class="social-icon" href="https://www.zhihu.com/people/wu-zhi-yan-64" target="_blank" title="知乎"><i class="iconfont icon-shejiaotubiao-46"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到阿清的小站✨✨✨ <img src="https://cdn.jsdelivr.net/gh/rigodlee/BLOGCDN/img/20150404H5648_ZuzhL.gif"></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/article/7d976d6e.html" title="butterfly主题的外挂标签"><img data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/bfeae8ade0ce4eaf51c39dec7a1e8159--3334906548.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="butterfly主题的外挂标签"/></a><div class="content"><a class="title" href="/article/7d976d6e.html" title="butterfly主题的外挂标签">butterfly主题的外挂标签</a><time datetime="2021-04-19T07:34:28.000Z" title="发表于 2021-04-19 15:34:28">2021-04-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/article/33db0a6c.html" title="hover时背景颜色从内向外辐射改变css"><img data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/83835df48769d14320c38f08f642b7b2--1193380614.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="hover时背景颜色从内向外辐射改变css"/></a><div class="content"><a class="title" href="/article/33db0a6c.html" title="hover时背景颜色从内向外辐射改变css">hover时背景颜色从内向外辐射改变css</a><time datetime="2021-04-19T07:19:14.000Z" title="发表于 2021-04-19 15:19:14">2021-04-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/article/6818b1b.html" title="js自动生成手机扫描二维码就可以实现自动下载apk的二维码"><img data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/IMG_0080.JPG" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="js自动生成手机扫描二维码就可以实现自动下载apk的二维码"/></a><div class="content"><a class="title" href="/article/6818b1b.html" title="js自动生成手机扫描二维码就可以实现自动下载apk的二维码">js自动生成手机扫描二维码就可以实现自动下载apk的二维码</a><time datetime="2021-03-11T02:05:49.000Z" title="发表于 2021-03-11 10:05:49">2021-03-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/article/190b2e80.html" title="uni-app开发"><img data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/IMG_0090.PNG" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="uni-app开发"/></a><div class="content"><a class="title" href="/article/190b2e80.html" title="uni-app开发">uni-app开发</a><time datetime="2021-01-25T10:46:44.000Z" title="发表于 2021-01-25 18:46:44">2021-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/article/80bcf6f4.html" title="微信小程序弹幕轮播"><img data-lazy-src="https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/IMG_0090.PNG" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="微信小程序弹幕轮播"/></a><div class="content"><a class="title" href="/article/80bcf6f4.html" title="微信小程序弹幕轮播">微信小程序弹幕轮播</a><time datetime="2021-01-02T08:11:53.000Z" title="发表于 2021-01-02 16:11:53">2021-01-02</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/gh/wuzhiguang1/bolgfile@2.0/photo/bf3c2ef4776eca04a56e14694b9626d9--557139948.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 阿清</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text"><a href="https://www.jsdelivr.com/" target="_blank" alt="JSDELIVR" rel="nofollow"><img src="https://cdn.jsdelivr.net/gh/rigodlee/BLOGCDN/img/jsdelivr.png" alt="JSDELIVR" style="height: 1.7em; max-height: 1.8em;padding-bottom: 0px;"><a href="https://console.upyun.com/" target="_blank" alt="又拍云" rel="nofollow"><img src="https://s1.ax1x.com/2020/07/27/aPoebR.png" alt="又拍云" style="height: 1.7em; max-height: 1.8em;padding-bottom: 0px;"></a>&nbsp;&nbsp;&nbsp;<a href="https://imgchr.com/" target="_blank" alt="路过图床" rel="nofollow"><img src="https://s1.ax1x.com/2020/07/27/aPWF3j.png" alt="路过图床" style="height: 1.7em; max-height: 1.8em;padding-bottom: 0px;"></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'o5H5rwQskclyhSdP7fBkCTEg-gzGzoHsz',
+      appKey: '00Wm5FbB6uSglqvkgrNh8NCv',
+      placeholder: '🍈🌽欢迎留言~~~ 🍦🍨',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="js/Lete.js"></script><div class="aplayer no-destroy" data-id="000PeZCQ1i4XVs" data-server="tencent" data-type="artist" data-fixed="true" data-mini="true" data-listFolded="false" data-order="random" data-preload="none" data-autoplay="true" muted></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
