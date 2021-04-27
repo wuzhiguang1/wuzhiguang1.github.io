@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>ERESOLVE unable to resolve dependency tree</title>
+      <link href="articl/8b080878.html"/>
+      <url>articl/8b080878.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="出现原因"><a href="#出现原因" class="headerlink" title="出现原因"></a>出现原因</h2><p>运行 <code>npm i</code> 安装依赖，报错 <code>ERESOLVE unable to resolve dependency tree</code></p><p><img src= "/img/loading.gif" data-lazy-src="https://gitee.com/wu_zhiguang/blog/raw/master/img/20210427115912.png"></p><h2 id="错误原因"><a href="#错误原因" class="headerlink" title="错误原因"></a>错误原因</h2><p>等依赖项中存在无法解决的冲突，<code>npm@7</code> 现在尝试安装它们，而<code>npm@6</code>没有。</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>使用 <code>npm i --legacy-peer-deps</code></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><a class="btn-beautify button--animated green larger" href="https://www.maple13.cn/posts/8b080878/"   title="点击前往"><i class="far fa-hand-point-right fa-fw"></i><span>点击前往</span></a>]]></content>
+      
+      
+      <categories>
+          
+          <category> Vue </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> npm </tag>
+            
+            <tag> VueCli </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HTML页面实现中英文切换</title>
       <link href="articl/15a47453.html"/>
       <url>articl/15a47453.html</url>
