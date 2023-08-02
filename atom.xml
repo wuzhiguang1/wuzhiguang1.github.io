@@ -6,7 +6,7 @@
   <link href="https://aqingya.cn/atom.xml" rel="self"/>
   
   <link href="https://aqingya.cn/"/>
-  <updated>2023-07-31T11:59:39.347Z</updated>
+  <updated>2023-08-02T09:07:25.641Z</updated>
   <id>https://aqingya.cn/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>微信小程序下载打开及预览PDF文件</title>
+    <link href="https://aqingya.cn/articl/edd561e3.html"/>
+    <id>https://aqingya.cn/articl/edd561e3.html</id>
+    <published>2023-08-02T09:04:00.000Z</published>
+    <updated>2023-08-02T09:07:25.641Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下载PDF文件 </span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">downLoadFile</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">     wx.showModal(&#123;</span><br><span class="line">        <span class="attr">title</span>: <span class="string">&#x27;温馨提示&#x27;</span>,</span><br><span class="line">        <span class="attr">content</span>: <span class="string">&#x27;确认要打开此PDF文件吗？&#x27;</span>,</span><br><span class="line">        <span class="attr">showCancel</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">cancelText</span>: <span class="string">&#x27;取消&#x27;</span>,</span><br><span class="line">        <span class="attr">confirmText</span>: <span class="string">&#x27;确定&#x27;</span>,</span><br><span class="line">        <span class="attr">success</span>: <span class="function">(<span class="params">result</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (result.confirm) &#123;</span><br><span class="line">            wx.downloadFile(&#123;</span><br><span class="line">              <span class="attr">url</span>: <span class="string">&#x27;https://XXXX.com/pdf&#x27;</span>,    <span class="comment">//实际获取文件的url地址</span></span><br><span class="line">              <span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">resinfo</span>) </span>&#123;</span><br><span class="line">                  <span class="built_in">console</span>.log(<span class="string">&quot;pdf文件下载成功啦&quot;</span>)</span><br><span class="line">                  <span class="keyword">let</span> path = resinfo.tempFilePath;</span><br><span class="line">                  <span class="built_in">console</span>.log(path, resinfo)</span><br><span class="line">                  wx.openDocument(&#123;</span><br><span class="line">                      <span class="attr">filePath</span>: path,  <span class="comment">// 文件的网络路径</span></span><br><span class="line">                      <span class="attr">fileType</span>: <span class="string">&#x27;pdf&#x27;</span>,</span><br><span class="line">                      <span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">rest</span>) </span>&#123;</span><br><span class="line">                          <span class="built_in">console</span>.log(<span class="string">&#x27;打开文件成功&#x27;</span>)</span><br><span class="line">                          <span class="built_in">console</span>.log(rest);</span><br><span class="line">                      &#125;,</span><br><span class="line">                      <span class="attr">fail</span>: <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">                          wx.showToast(&#123;</span><br><span class="line">                              <span class="attr">icon</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">                              <span class="attr">title</span>: <span class="string">&#x27;打开文件失败&#x27;</span></span><br><span class="line">                          &#125;);</span><br><span class="line">                      &#125;,</span><br><span class="line">                  &#125;)</span><br><span class="line">              &#125;,</span><br><span class="line">              <span class="attr">fail</span>: <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">                  wx.showToast(&#123;</span><br><span class="line">                    <span class="attr">icon</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">                    <span class="attr">title</span>: <span class="string">&#x27;下载文件失败&#x27;</span></span><br><span class="line">                &#125;);</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;)     </span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">fail</span>: <span class="function">() =&gt;</span> &#123;&#125;,</span><br><span class="line">        <span class="attr">complete</span>: <span class="function">() =&gt;</span> &#123;&#125;</span><br><span class="line">      &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;l</summary>
+      
+    
+    
+    
+    <category term="微信小程序" scheme="https://aqingya.cn/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
+    
+    
+    <category term="微信小程序" scheme="https://aqingya.cn/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用JavaScript将小写金额转化为大写金额</title>
+    <link href="https://aqingya.cn/articl/7d398978.html"/>
+    <id>https://aqingya.cn/articl/7d398978.html</id>
+    <published>2023-08-02T09:02:08.000Z</published>
+    <updated>2023-08-02T09:15:38.092Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 数字金额大写转换(可以处理整数,小数,负数) */</span>  </span><br><span class="line"><span class="function"><span class="title">dealBigMoney</span>(<span class="params">n</span>)</span>   </span><br><span class="line">&#123;  </span><br><span class="line">    <span class="keyword">var</span> fraction = [<span class="string">&#x27;角&#x27;</span>, <span class="string">&#x27;分&#x27;</span>];  </span><br><span class="line">    <span class="keyword">var</span> digit = [<span class="string">&#x27;零&#x27;</span>, <span class="string">&#x27;壹&#x27;</span>, <span class="string">&#x27;贰&#x27;</span>, <span class="string">&#x27;叁&#x27;</span>, <span class="string">&#x27;肆&#x27;</span>, <span class="string">&#x27;伍&#x27;</span>, <span class="string">&#x27;陆&#x27;</span>, <span class="string">&#x27;柒&#x27;</span>, <span class="string">&#x27;捌&#x27;</span>, <span class="string">&#x27;玖&#x27;</span>];  </span><br><span class="line">    <span class="keyword">var</span> unit = [ [<span class="string">&#x27;元&#x27;</span>, <span class="string">&#x27;万&#x27;</span>, <span class="string">&#x27;亿&#x27;</span>], [<span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;拾&#x27;</span>, <span class="string">&#x27;佰&#x27;</span>, <span class="string">&#x27;仟&#x27;</span>]  ];  </span><br><span class="line">    <span class="keyword">var</span> head = n &lt; <span class="number">0</span>? <span class="string">&#x27;欠&#x27;</span>: <span class="string">&#x27;&#x27;</span>;  </span><br><span class="line">    n = <span class="built_in">Math</span>.abs(n);  </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">var</span> s = <span class="string">&#x27;&#x27;</span>;  </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; fraction.length; i++)   </span><br><span class="line">    &#123;  </span><br><span class="line">        s += (digit[<span class="built_in">Math</span>.floor(n * <span class="number">10</span> * <span class="built_in">Math</span>.pow(<span class="number">10</span>, i)) % <span class="number">10</span>] + fraction[i]).replace(<span class="regexp">/零./</span>, <span class="string">&#x27;&#x27;</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">    s = s || <span class="string">&#x27;整&#x27;</span>;  </span><br><span class="line">    n = <span class="built_in">Math</span>.floor(n);  </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; unit[<span class="number">0</span>].length &amp;&amp; n &gt; <span class="number">0</span>; i++)   </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="keyword">var</span> p = <span class="string">&#x27;&#x27;</span>;  </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; unit[<span class="number">1</span>].length &amp;&amp; n &gt; <span class="number">0</span>; j++)   </span><br><span class="line">        &#123;  </span><br><span class="line">            p = digit[n % <span class="number">10</span>] + unit[<span class="number">1</span>][j] + p;  </span><br><span class="line">            n = <span class="built_in">Math</span>.floor(n / <span class="number">10</span>);  </span><br><span class="line">        &#125;  </span><br><span class="line">        s = p.replace(<span class="regexp">/(零.)*零$/</span>, <span class="string">&#x27;&#x27;</span>).replace(<span class="regexp">/^$/</span>, <span class="string">&#x27;零&#x27;</span>)  + unit[<span class="number">0</span>][i] + s;  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">return</span> head + s.replace(<span class="regexp">/(零.)*零元/</span>, <span class="string">&#x27;元&#x27;</span>).replace(<span class="regexp">/(零.)+/g</span>, <span class="string">&#x27;零&#x27;</span>).replace(<span class="regexp">/^整$/</span>, <span class="string">&#x27;零元整&#x27;</span>);  </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;l</summary>
+      
+    
+    
+    
+    <category term="JavaScript" scheme="https://aqingya.cn/categories/JavaScript/"/>
+    
+    
+    <category term="JavaScript" scheme="https://aqingya.cn/tags/JavaScript/"/>
+    
+  </entry>
   
   <entry>
     <title>JS实现千位分隔符的两种方法。</title>
@@ -459,55 +507,6 @@
     
     
     <category term="JavaScript" scheme="https://aqingya.cn/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Javascript ?.(问号点取)可选链语法</title>
-    <link href="https://aqingya.cn/articl/adf47688.html"/>
-    <id>https://aqingya.cn/articl/adf47688.html</id>
-    <published>2022-11-28T12:17:30.000Z</published>
-    <updated>2022-11-28T12:32:49.235Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="可选链语法"><a href="#可选链语法" class="headerlink" title="可选链语法"></a>可选链语法</h4><p><code>object?.attr</code>获取object属性attr前先判断object是否存在，在object后面加上<code>?</code>，这是JavaScript的可选链语法。</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> object = &#123;</span><br><span class="line"><span class="attr">attr</span>: value</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> value = object?.attr</span><br></pre></td></tr></table></figure><p>可选链语句在编译时会被解析为：</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">object === <span class="literal">null</span> || object === <span class="keyword">void</span> <span class="number">0</span> ? <span class="keyword">void</span> <span class="number">0</span> : object.attr</span><br></pre></td></tr></table></figure><p>这句代码的意思是，如果object恒等于null或者undefined时，取值为undefined,否则为object.attr。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h4 id=&quot;可选链语法&quot;&gt;&lt;a href=&quot;#可选链语法&quot; class=&quot;headerlink&quot; title=&quot;可选链语法&quot;&gt;&lt;/a&gt;可选链语法&lt;/h4&gt;&lt;p&gt;&lt;code&gt;object?.attr&lt;/code&gt;获取object属性attr前先判断object是否存在，在obj</summary>
-      
-    
-    
-    
-    <category term="JavaScript" scheme="https://aqingya.cn/categories/JavaScript/"/>
-    
-    
-    <category term="JavaScript" scheme="https://aqingya.cn/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>React消息订阅与发布机制（组件之间传值）</title>
-    <link href="https://aqingya.cn/articl/d92d3ad3.html"/>
-    <id>https://aqingya.cn/articl/d92d3ad3.html</id>
-    <published>2022-11-25T07:34:13.000Z</published>
-    <updated>2022-11-25T07:52:39.600Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>先订阅，再发布（理解：隔空对话的感觉）<br>安装第三方库pubsub-js yarn add pubsub-js，利用钩子函数componentDidMount在组件挂载后subscribe（）函数进行订阅消息，该行为会返回一个token值，供<strong>unsubscribe（）</strong>取消订阅时使用，根据token取消对应的消息.</p></blockquote><p>安装</p><blockquote><p> npm install pubsub-js<br> yarn add pubsub-js</p></blockquote><p>引入</p><blockquote><p> import pubsub from ‘pubsub-js’;</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//订阅</span></span><br><span class="line">   <span class="function"><span class="title">componentDidMount</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       <span class="built_in">this</span>.token = PubSub.subscribe(<span class="string">&#x27;usersData&#x27;</span>,<span class="function">(<span class="params">_,data</span>) =&gt;</span> &#123;</span><br><span class="line">           <span class="built_in">console</span>.log(<span class="string">&#x27;订阅消息：&#x27;</span>,data)</span><br><span class="line">           <span class="built_in">this</span>.setState(&#123;...data&#125;)</span><br><span class="line">       &#125;)</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure><blockquote><p>publish() 进行发布消息</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//发布消息</span></span><br><span class="line">PubSub.publish(<span class="string">&#x27;usersData&#x27;</span>,&#123;<span class="attr">isFirst</span>:<span class="literal">false</span>,<span class="attr">isLoading</span>:<span class="literal">true</span>&#125;)</span><br><span class="line">   <span class="comment">//发送网络请求</span></span><br><span class="line">   axios.get(<span class="string">`https://api.github.com/search/users?q=<span class="subst">$&#123;keyWord&#125;</span>`</span>).then(</span><br><span class="line">       <span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">           <span class="comment">// this.props.UpdateAppState(&#123;isLoading:false,users:response.data.items&#125;)</span></span><br><span class="line">           PubSub.publish(<span class="string">&#x27;usersData&#x27;</span>,&#123;<span class="attr">isLoading</span>:<span class="literal">false</span>,<span class="attr">users</span>:response.data.items&#125;)</span><br><span class="line"></span><br><span class="line">       &#125;,</span><br><span class="line">       <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">           <span class="comment">//this.props.UpdateAppState(&#123;isLoading:false,err:error.message&#125;)&#125;</span></span><br><span class="line">           PubSub.publish(<span class="string">&#x27;usersData&#x27;</span>,&#123;<span class="attr">isLoading</span>:<span class="literal">false</span>,<span class="attr">err</span>:error.message&#125;)</span><br><span class="line">       &#125;</span><br><span class="line">           </span><br><span class="line">   )</span><br></pre></td></tr></table></figure><blockquote><p>适用于任意组件间通信<br>不像props,限制在父子间传递</p><p>要在组件的componentWillUnMount中取消订阅</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//取消订阅</span></span><br><span class="line"><span class="function"><span class="title">componentWillUnmount</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    PubSub.unsubscribe(<span class="built_in">this</span>.token)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;先订阅，再发布（理解：隔空对话的感觉）&lt;br&gt;安装第三方库pubsub-js yarn add pubsub-js，利用钩子函数componentDidMount在组件挂载后subscribe（）函数进行订阅消息，该行为会返回一个token值，供&lt;</summary>
-      
-    
-    
-    
-    <category term="React" scheme="https://aqingya.cn/categories/React/"/>
-    
-    
-    <category term="React" scheme="https://aqingya.cn/tags/React/"/>
     
   </entry>
   
