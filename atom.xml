@@ -6,7 +6,7 @@
   <link href="https://aqingya.cn/atom.xml" rel="self"/>
   
   <link href="https://aqingya.cn/"/>
-  <updated>2024-08-15T07:15:44.877Z</updated>
+  <updated>2025-11-20T07:38:00.121Z</updated>
   <id>https://aqingya.cn/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>测试</title>
+    <link href="https://aqingya.cn/articl/9daba997.html"/>
+    <id>https://aqingya.cn/articl/9daba997.html</id>
+    <published>2025-11-19T08:20:05.406Z</published>
+    <updated>2025-11-20T07:38:00.121Z</updated>
+    
+    <content type="html"><![CDATA[<p><code>&#123;&#39;类型1&#39;:[&quot;https://cdn.toonice.com.cn/202507311818501.jpg&quot;,&#39;https://cdn.toonice.com.cn/202510271436525.png&#39;],&#39;类型2&#39;:[&#39;https://cdn.toonice.com.cn/202507311818501.jpg&#39;,&#39;https://cdn.toonice.com.cn/202510271436525.png&#39;],&#39;类型3&#39;:[&#39;https://cdn.toonice.com.cn/202507311818501.jpg&#39;,&#39;https://cdn.toonice.com.cn/202510271436525.png&#39;],&#39;类型4&#39;:[&#39;https://cdn.toonice.com.cn/202507311818501.jpg&#39;],&#39;类型5&#39;:[&#39;https://cdn.toonice.com.cn/202507311818501.jpg&#39;,&#39;https://cdn.toonice.com.cn/202510271436525.png&#39;],&#39;类型6&#39;:[&#39;https://cdn.toonice.com.cn/202507311818501.jpg&#39;,&#39;https://cdn.toonice.com.cn/202510271436525.png&#39;]&#125;</code></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;code&gt;&amp;#123;&amp;#39;类型1&amp;#39;:[&amp;quot;https://cdn.toonice.com.cn/202507311818501.jpg&amp;quot;,&amp;#39;https://cdn.toonice.com.cn/202510271436525.png</summary>
+      
+    
+    
+    
+    <category term="美睫" scheme="https://aqingya.cn/categories/%E7%BE%8E%E7%9D%AB/"/>
+    
+    
+    <category term="美睫" scheme="https://aqingya.cn/tags/%E7%BE%8E%E7%9D%AB/"/>
+    
+  </entry>
   
   <entry>
     <title>uniapp：通知上一页刷新，有这么几个方式；常用于详情返回列表</title>
@@ -483,32 +507,6 @@
     
     
     <category term="微信小程序" scheme="https://aqingya.cn/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Windows下将前端vue项目打包部署到Nginx中</title>
-    <link href="https://aqingya.cn/articl/1f1fdea8.html"/>
-    <id>https://aqingya.cn/articl/1f1fdea8.html</id>
-    <published>2022-12-15T01:55:09.000Z</published>
-    <updated>2022-12-15T01:59:34.331Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="（一）将前端-vue-项目部署到-Nginx"><a href="#（一）将前端-vue-项目部署到-Nginx" class="headerlink" title="（一）将前端 vue 项目部署到 Nginx"></a>（一）将前端 vue 项目部署到 Nginx</h2><p>1、官网下载 nginx 稳定版：<a href="http://nginx.org/en/download.html">http://nginx.org/en/download.html</a><br>（如下载到 E:\nginx\nginx-1.18.0 目录中）</p><p><img src="https://qny.aqingya.cn/img/20221215095634.png"></p><p>2、双击运行 nginx，然后通过查看任务管理器，确定 nginx 是否已经执行。</p><p><img src="https://qny.aqingya.cn/img/20221215095649.png"></p><p><strong>注意：nginx 默认端口号是80，如果端口号被占用，需要修改。</strong></p><p>3、将前端 <code>npm run build</code> 打包后的 <code>dist</code> 文件夹复制到 <code>html</code>文件夹中</p><p><img src="https://qny.aqingya.cn/img/20221215095713.png"></p><p>4、修改 E:\nginx\nginx-1.18.0\conf\nginx.conf 文件</p><p>（1）将 <code>#user nobody</code> 修改为 <code>#user root</code></p><p><img src="https://qny.aqingya.cn/img/20221215095731.png"></p><p>2）修改 server<br>root 默认是 html，这里改为 html/dist ，nginx 会在 dist 文件夹中找到 index.html打开。<br>（如果80端口号被占用，此处将端口号80改为 88或者其他）</p><p><img src="https://qny.aqingya.cn/img/20221215095744.png"></p><p>修改完成之后，重新启动 nginx。<br>在浏览器中输入 localhost:80 或者 127.0.0.1:80 即可打开项目。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;（一）将前端-vue-项目部署到-Nginx&quot;&gt;&lt;a href=&quot;#（一）将前端-vue-项目部署到-Nginx&quot; class=&quot;headerlink&quot; title=&quot;（一）将前端 vue 项目部署到 Nginx&quot;&gt;&lt;/a&gt;（一）将前端 vue 项目部署到 Ngi</summary>
-      
-    
-    
-    
-    <category term="前端库" scheme="https://aqingya.cn/categories/%E5%89%8D%E7%AB%AF%E5%BA%93/"/>
-    
-    
-    <category term="Vue" scheme="https://aqingya.cn/tags/Vue/"/>
-    
-    <category term="Nginx" scheme="https://aqingya.cn/tags/Nginx/"/>
     
   </entry>
   
